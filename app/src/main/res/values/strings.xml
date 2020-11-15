@@ -1,8 +1,8 @@
 <resources>
-	<string name="app_name">MovieList</string>
+    <string name="app_name">MovieList</string>
 
-	<string name="text_no_connectivity">No Internet Connection Available</string>
-	<string name="text_movie_poster">Movie Poster</string>
-	<string name="text_connectivity">Back Online</string>
+    <string name="text_no_connectivity">No Internet Connection Available</string>
+    <string name="text_movie_poster">Movie Poster</string>
+    <string name="text_connectivity">Back Online</string>
     <string name="book_tickets">Book Ticket</string>
 </resources>

@@ -14,9 +14,10 @@ class MovieListAdapter(
     private var mNowPlayingMovieList = ArrayList<NowPlayingMovie>()
 
     fun submitList(toMutableList: MutableList<NowPlayingMovie>){
+        val previous = mNowPlayingMovieList.size
         mNowPlayingMovieList.clear()
         mNowPlayingMovieList.addAll(toMutableList)
-        notifyDataSetChanged()
+        notifyItemRangeChanged(previous, toMutableList.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NowPlayingMovieViewHolder (
