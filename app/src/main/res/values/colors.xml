@@ -7,4 +7,11 @@
 	<color name="teal_700">#FF018786</color>
 	<color name="black">#FF000000</color>
 	<color name="white">#FFFFFFFF</color>
+	<color name="text_primary">#212121</color>
+	<color name="text_secondary">#757575</color>
+
+	<color name="colorStatusConnected">#43A047</color>
+	<color name="colorStatusNotConnected">#D32F2F</color>
+	<color name="now_playing_movie_background">@android:color/white</color>
+	<color name="imageBackgroundTint">#C3C3C3</color>
 </resources>

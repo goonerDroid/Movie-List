@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="215dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dimen_1"
+    android:foreground="?android:attr/selectableItemBackground"
+    tools:ignore="UnusedAttribute">
+
+    <FrameLayout
+        android:id="@+id/poster_container"
+        android:layout_width="170dp"
+        android:layout_height="245dp"
+        android:layout_marginStart="@dimen/dimen_16"
+        android:layout_marginTop="@dimen/dimen_16"
+        android:layout_marginBottom="@dimen/dimen_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/movie_poster"
+            style="@style/NowPlayingMovieImage"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/text_movie_poster"
+            android:transitionName="photo"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:background="#88212121"
+            android:text="@string/book_tickets"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/movie_title"
+        style="@style/NowPlayingMovieTitleText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/poster_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/poster_container"
+        tools:text="@tools:sample/lorem" />
+
+
+    <TextView
+        android:id="@+id/movie_release"
+        style="@style/NowPlayingMovieReleaseText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_title"
+        tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/likes_count"
+        style="@style/NowPlayingMovieLikeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:drawableStartCompat="@drawable/baseline_thumb_up_alt_green_a400_18dp"
+        app:layout_constraintStart_toEndOf="@id/movie_release"
+        app:layout_constraintTop_toBottomOf="@+id/movie_title"
+        app:layout_constraintEnd_toEndOf="@id/poster_container" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

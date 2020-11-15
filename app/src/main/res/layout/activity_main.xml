@@ -1,18 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/swipeRefreshLayout"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:context=".MainActivity">
+	android:layout_height="wrap_content">
 
-	<TextView
-		android:layout_width="wrap_content"
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Hello World!"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+		android:animateLayoutChanges="true"
+		tools:context=".ui.movieList.MovieListActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+		<LinearLayout
+			android:id="@+id/networkStatusLayout"
+			style="@style/StatusView"
+			android:layout_width="match_parent"
+			android:layout_height="46dp"
+			android:background="@color/colorStatusNotConnected"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent">
+
+			<TextView
+				android:id="@+id/textViewNetworkStatus"
+				style="@style/StatusTextView"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				tools:text="@string/text_no_connectivity" />
+		</LinearLayout>
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/nowPlayingMovieRecyclerView"
+			style="@style/NowPlayingMoviesRecyclerStyle"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/networkStatusLayout"
+			tools:listitem="@layout/item_now_playing" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
