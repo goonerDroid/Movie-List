@@ -10,7 +10,7 @@ import com.sublime.movielist.model.NowPlayingMovie.Companion.TABLE_NAME
 import kotlinx.android.parcel.Parcelize
 
 /**
- * Data class for Database entity and Serialization.
+ * Data class for Database entity and Serialization for Now playing movies.
  */
 @Keep
 @Parcelize

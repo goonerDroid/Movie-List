@@ -1,7 +1,9 @@
 package com.sublime.movielist.data.repository
 
+import com.sublime.movielist.data.local.dao.MovieDetailDao
 import com.sublime.movielist.data.local.dao.NowPlayingMovieDao
 import com.sublime.movielist.data.remote.MovieService
+import com.sublime.movielist.model.MovieDetail
 import com.sublime.movielist.model.NowPlayingMovie
 import com.sublime.movielist.model.NowPlayingMovieResponse
 import com.sublime.movielist.model.State
@@ -21,6 +23,7 @@ import javax.inject.Singleton
 @Singleton
 class MoviesRepository  @Inject constructor(
     private val nowPlayingMovieDao: NowPlayingMovieDao,
+    private val movieDetailDao: MovieDetailDao,
     private val movieService: MovieService
 ) {
 
@@ -30,7 +33,7 @@ class MoviesRepository  @Inject constructor(
     }
 
     /**
-     * Fetched the posts from network and stored it in database. At the end, data from persistence
+     * Fetched the now playing movies from network and stored it in database. At the end, data from persistence
      * storage is fetched and emitted.
      */
     fun getNowPlayingMovies(): Flow<State<List<NowPlayingMovie>>> {
@@ -44,5 +47,23 @@ class MoviesRepository  @Inject constructor(
             override suspend fun fetchFromRemote(): Response<NowPlayingMovieResponse> = movieService.getNowPlayingMovies(MOVIE_DB_API_KEY/*,
                 MOVIE_REGION*/)
         }.asFlow().flowOn(Dispatchers.IO)
+    }
+
+    fun getMovieDetail(movieId: Int): Flow<State<MovieDetail>> {
+        return object : NetworkBoundRepository<MovieDetail, MovieDetail>() {
+
+            override suspend fun saveRemoteData(response: MovieDetail) =
+                    movieDetailDao.insertMovieDetail(response)
+
+            override fun fetchFromLocal(): Flow<MovieDetail> = movieDetailDao.getMovieDetail()
+
+            override suspend fun fetchFromRemote(): Response<MovieDetail> = movieService.getMovieDetail(movieId, MOVIE_DB_API_KEY)
+        }.asFlow().flowOn(Dispatchers.IO)
+    }
+
+
+    fun getSearchedDogs(search: String): Flow<List<NowPlayingMovie>> {
+        return nowPlayingMovieDao.getSearchedMovies(search) //Get searched movies from Room Database
+                .flowOn(Dispatchers.Default)
     }
 }

@@ -4,7 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.sublime.movielist.data.local.dao.MovieDetailDao
 import com.sublime.movielist.data.local.dao.NowPlayingMovieDao
+import com.sublime.movielist.data.typeconverter.MovieGenreItemTypeConverter
+import com.sublime.movielist.model.Genre
+import com.sublime.movielist.model.MovieDetail
 import com.sublime.movielist.model.NowPlayingMovie
 
 
@@ -13,9 +18,10 @@ import com.sublime.movielist.model.NowPlayingMovie
  * It provides DAO [NowPlayingMovieDao] by using method [getNowPlayingMovieDao].
  */
 @Database(
-    entities = [NowPlayingMovie::class],
+    entities = [NowPlayingMovie::class, MovieDetail::class,Genre::class],
     version = DatabaseMigrations.DB_VERSION
 )
+@TypeConverters(MovieGenreItemTypeConverter::class)
 abstract class MovieListDatabase : RoomDatabase() {
 
     companion object {
@@ -47,4 +53,11 @@ abstract class MovieListDatabase : RoomDatabase() {
      * @return [NowPlayingMovieDao] Now Playing Movies Data Access Object.
      */
     abstract fun getNowPlayingMovieDao(): NowPlayingMovieDao
+
+    /**
+     * @return [MovieDetailDao] Movie Detail Data Access Object.
+     */
+    abstract fun getMovieDetailDao(): MovieDetailDao
+
+
 }

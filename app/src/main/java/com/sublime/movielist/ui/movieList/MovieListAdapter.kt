@@ -3,36 +3,35 @@ package com.sublime.movielist.ui.movieList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.sublime.movielist.databinding.ItemNowPlayingBinding
 import com.sublime.movielist.model.NowPlayingMovie
 
 class MovieListAdapter(
     private val onItemClicked: (NowPlayingMovie, ImageView) -> Unit
-) : RecyclerView.Adapter<NowPlayingMovieViewHolder>() {
+) : ListAdapter<NowPlayingMovie,NowPlayingMovieViewHolder>(NowPlayingMovieListDiff()) {
 
-    private var mNowPlayingMovieList = ArrayList<NowPlayingMovie>()
-
-    fun submitList(toMutableList: MutableList<NowPlayingMovie>){
-        val previous = mNowPlayingMovieList.size
-        mNowPlayingMovieList.clear()
-        mNowPlayingMovieList.addAll(toMutableList)
-        notifyItemRangeChanged(previous, toMutableList.size)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = NowPlayingMovieViewHolder (
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)= NowPlayingMovieViewHolder (
         ItemNowPlayingBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+                LayoutInflater.from(parent.context),
+                parent,
+                false
         )
     )
 
-    override fun getItemCount(): Int {
-        return mNowPlayingMovieList.size
+    override fun onBindViewHolder(holder: NowPlayingMovieViewHolder, position: Int) {
+        holder.bind(getItem(position), onItemClicked)
     }
 
-    override fun onBindViewHolder(holder: NowPlayingMovieViewHolder, position: Int) {
-        holder.bind(mNowPlayingMovieList[holder.adapterPosition], onItemClicked)
+    private class NowPlayingMovieListDiff : DiffUtil.ItemCallback<NowPlayingMovie>() {
+
+        override fun areItemsTheSame(oldItem: NowPlayingMovie, newItem: NowPlayingMovie): Boolean {
+            return oldItem.movieId == newItem.movieId
+        }
+
+        override fun areContentsTheSame(oldItem: NowPlayingMovie, newItem: NowPlayingMovie): Boolean {
+            return oldItem == newItem
+        }
     }
 }

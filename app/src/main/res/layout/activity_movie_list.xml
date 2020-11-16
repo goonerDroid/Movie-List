@@ -12,6 +12,19 @@
 		android:animateLayoutChanges="true"
 		tools:context=".ui.movieList.MovieListActivity">
 
+		<androidx.appcompat.widget.SearchView
+			android:id="@+id/searchView"
+			android:theme="@style/ThemeOverlay.SearchView"
+			android:layout_width="match_parent"
+			android:layout_height="56dp"
+			android:layout_margin="@dimen/dimen_16"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:iconifiedByDefault="false"
+			android:queryHint="Search by city name" />
+
+
 		<LinearLayout
 			android:id="@+id/networkStatusLayout"
 			style="@style/StatusView"
@@ -37,7 +50,7 @@
 			android:layout_height="0dp"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/networkStatusLayout"
+			app:layout_constraintTop_toBottomOf="@+id/searchView"
 			tools:listitem="@layout/item_now_playing" />
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

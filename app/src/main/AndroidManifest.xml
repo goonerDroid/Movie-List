@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieList">
-        <activity android:name=".ui.movieDetail.MovieDetailActivity"></activity>
+        <activity android:name=".ui.movieDetail.MovieDetailActivity"/>
         <activity
             android:name=".ui.movieList.MovieListActivity"
             android:screenOrientation="portrait">

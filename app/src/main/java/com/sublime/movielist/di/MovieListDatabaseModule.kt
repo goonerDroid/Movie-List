@@ -20,4 +20,8 @@ class MovieListDatabaseModule {
     @Singleton
     @Provides
     fun provideNowPlayingMoviesDao(database: MovieListDatabase) = database.getNowPlayingMovieDao()
+
+    @Singleton
+    @Provides
+    fun provideMovieDetailDaoDao(database: MovieListDatabase) = database.getMovieDetailDao()
 }

@@ -33,4 +33,8 @@ interface NowPlayingMovieDao {
      */
     @Query("SELECT * FROM ${NowPlayingMovie.TABLE_NAME}")
     fun getAllNowPlayingMovies(): Flow<List<NowPlayingMovie>>
+
+
+    @Query("SELECT * FROM ${NowPlayingMovie.TABLE_NAME} WHERE movieTitle LIKE '%' || :search || '%'")
+    fun getSearchedMovies(search: String?): Flow<List<NowPlayingMovie>>
 }

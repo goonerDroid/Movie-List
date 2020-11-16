@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sublime.movielist.R
@@ -15,7 +16,9 @@ import com.sublime.movielist.ui.base.BaseActivity
 import com.sublime.movielist.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBinding>() {
@@ -33,36 +36,45 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
         setContentView(mViewBinding.root)
 
         // Initialize RecyclerView
-
-//        mViewBinding.nowPlayingMovieRecyclerView.adapter = mAdapter
-//        mViewBinding.nowPlayingMovieRecyclerView.apply {
-//            layoutManager = LinearLayoutManager(this@MovieListActivity)
-//        }
-
         mViewBinding.nowPlayingMovieRecyclerView.layoutManager = GridLayoutManager(this,2)
         mViewBinding.nowPlayingMovieRecyclerView.adapter = mAdapter
-        initNowPlayingMovies()
+
+        initNowPlayingMoviesObservers()
         handleNetworkChanges()
+        initSearchViewListener()
     }
 
-    private fun initNowPlayingMovies() {
+    private fun initSearchViewListener() {
+        mViewBinding.searchView.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { mViewModel.setSearchQuery(it) }
+                return true
+            }
+        }
+        )
+    }
+
+    private fun initNowPlayingMoviesObservers() {
         mViewModel.nowPlayingMoviesLiveData.observe(
-            this,
-            Observer { state ->
-                when (state) {
-                    is State.Loading -> showLoading(true)
-                    is State.Success -> {
-                        if (state.data.isNotEmpty()) {
-                            mAdapter.submitList(state.data.toMutableList())
+                this,
+                Observer { state ->
+                    when (state) {
+                        is State.Loading -> showLoading(true)
+                        is State.Success -> {
+                            if (state.data.isNotEmpty()) {
+                                mAdapter.submitList(state.data.toMutableList())
+                                showLoading(false)
+                            }
+                        }
+                        is State.Error -> {
+                            showToast(state.message)
                             showLoading(false)
                         }
                     }
-                    is State.Error -> {
-                        showToast(state.message)
-                        showLoading(false)
-                    }
                 }
-            }
         )
 
         mViewBinding.swipeRefreshLayout.setOnRefreshListener {
@@ -73,6 +85,10 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
         if (mViewModel.nowPlayingMoviesLiveData.value !is State.Success) {
             getNowPlayingMovies()
         }
+
+        mViewModel.searchedMovieLiveData.observe(this, Observer {
+            mAdapter.submitList(it.toMutableList())
+        })
     }
 
     /**
@@ -80,36 +96,36 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
      */
     private fun handleNetworkChanges() {
         NetworkUtils.getNetworkLiveData(applicationContext).observe(
-            this,
-            Observer { isConnected ->
-                if (!isConnected) {
-                    mViewBinding.textViewNetworkStatus.text =
-                        getString(R.string.text_no_connectivity)
-                    mViewBinding.networkStatusLayout.apply {
-                        show()
-                        setBackgroundColor(getColorRes(R.color.colorStatusNotConnected))
-                    }
-                } else {
-                    if (mViewModel.nowPlayingMoviesLiveData.value is State.Error || mAdapter.itemCount == 0) {
-                        getNowPlayingMovies()
-                    }
-                    mViewBinding.textViewNetworkStatus.text = getString(R.string.text_connectivity)
-                    mViewBinding.networkStatusLayout.apply {
-                        setBackgroundColor(getColorRes(R.color.colorStatusConnected))
+                this,
+                Observer { isConnected ->
+                    if (!isConnected) {
+                        mViewBinding.textViewNetworkStatus.text =
+                                getString(R.string.text_no_connectivity)
+                        mViewBinding.networkStatusLayout.apply {
+                            show()
+                            setBackgroundColor(getColorRes(R.color.colorStatusNotConnected))
+                        }
+                    } else {
+                        if (mViewModel.nowPlayingMoviesLiveData.value is State.Error || mAdapter.itemCount == 0) {
+                            getNowPlayingMovies()
+                        }
+                        mViewBinding.textViewNetworkStatus.text = getString(R.string.text_connectivity)
+                        mViewBinding.networkStatusLayout.apply {
+                            setBackgroundColor(getColorRes(R.color.colorStatusConnected))
 
-                        animate()
-                            .alpha(1f)
-                            .setStartDelay(ANIMATION_DURATION)
-                            .setDuration(ANIMATION_DURATION)
-                            .setListener(object : AnimatorListenerAdapter() {
-                                override fun onAnimationEnd(animation: Animator) {
-                                    hide()
-                                }
-                            }
-                            )
+                            animate()
+                                    .alpha(1f)
+                                    .setStartDelay(ANIMATION_DURATION)
+                                    .setDuration(ANIMATION_DURATION)
+                                    .setListener(object : AnimatorListenerAdapter() {
+                                        override fun onAnimationEnd(animation: Animator) {
+                                            hide()
+                                        }
+                                    }
+                                    )
+                        }
                     }
                 }
-            }
         )
     }
 
@@ -133,9 +149,4 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
 //
 //        startActivity(intent, options.toBundle())//TODO
     }
-
-
-
-
-
 }
