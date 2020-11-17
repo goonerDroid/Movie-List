@@ -99,7 +99,7 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
     private fun handleNetworkChanges() {
         NetworkUtils.getNetworkLiveData(applicationContext).observe(
                 this,
-                Observer { isConnected ->
+                { isConnected ->
                     if (!isConnected) {
                         mViewBinding.textViewNetworkStatus.text =
                                 getString(R.string.text_no_connectivity)
@@ -140,17 +140,6 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
     }
 
     private fun onItemClicked(movie: Movie, imageView: ImageView) {
-//        val intent = Intent(this, PostDetailsActivity::class.java)
-//        intent.putExtra(PostDetailsActivity.POST_ID, nowPlayingMovie.id)
-//
-//        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//            this,
-//            imageView,
-//            imageView.transitionName
-//        )
-//
-//        startActivity(intent, options.toBundle())
-
         startActivity(
                 Intent(this, MovieDetailActivity::class.java).apply {
                     putExtra("id", movie.movieId)

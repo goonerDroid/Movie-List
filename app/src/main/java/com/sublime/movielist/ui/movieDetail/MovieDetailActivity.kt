@@ -1,6 +1,9 @@
 package com.sublime.movielist.ui.movieDetail
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -12,12 +15,14 @@ import com.sublime.movielist.data.remote.MovieService
 import com.sublime.movielist.databinding.ActivityMovieDetailBinding
 import com.sublime.movielist.model.*
 import com.sublime.movielist.ui.base.BaseActivity
-import com.sublime.movielist.utils.showToast
+import com.sublime.movielist.ui.movieList.MovieListActivity
+import com.sublime.movielist.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -34,7 +39,9 @@ class MovieDetailActivity : BaseActivity<MovieDetailViewModel, ActivityMovieDeta
             by viewModels()
 
     override fun getViewBinding(): ActivityMovieDetailBinding  = ActivityMovieDetailBinding.inflate(layoutInflater)
-
+    companion object {
+        const val ANIMATION_DURATION = 1000.toLong()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +49,7 @@ class MovieDetailActivity : BaseActivity<MovieDetailViewModel, ActivityMovieDeta
         initToolbar()
         movieId = mViewModel.movieIdDataNotifier.value
         initRecyclerViews()
+        handleNetworkChanges()
     }
 
     override fun onResume() {
@@ -54,53 +62,66 @@ class MovieDetailActivity : BaseActivity<MovieDetailViewModel, ActivityMovieDeta
                 this,
                 { state ->
                     when (state) {
+                        is State.Loading -> showLoading(true)
                         is State.Success -> {
                             setupMovieSynopsisUi(state.data)
+                            showLoading(false)
                         }
                         is State.Error -> {
                             showToast(state.message)
+                            showLoading(false)
                         }
                     }
                 }
         )
 
         mViewModel.movieCreditsLiveData.observe(this,
-            { state ->
-                when (state) {
-                    is State.Success -> {
-                        setupMovieCreditsUi(state.data)
-                    }
-                    is State.Error -> {
-                        showToast(state.message)
+                { state ->
+                    when (state) {
+                        is State.Loading -> showLoading(true)
+                        is State.Success -> {
+                            setupMovieCreditsUi(state.data)
+                            showLoading(false)
+                        }
+                        is State.Error -> {
+                            showToast(state.message)
+                            showLoading(false)
+                        }
                     }
                 }
-            }
         )
 
         mViewModel.movieReviewsLiveData.observe(this,
-            { state ->
-                when (state) {
-                    is State.Success -> {
-                        setupMovieReviewsUi(state.data)
-                    }
-                    is State.Error -> {
-                        showToast(state.message)
+                { state ->
+                    when (state) {
+                        is State.Loading -> showLoading(true)
+                        is State.Success -> {
+                            setupMovieReviewsUi(state.data)
+                            showLoading(false)
+                        }
+                        is State.Error -> {
+                            showToast(state.message)
+                            showLoading(false)
+                        }
                     }
                 }
-            }
         )
 
+        mViewBinding.swipeRefreshLayout.setOnRefreshListener {
+            getAllMovieDetailById(movieId!!)
+        }
+
         mViewModel.similarMoviesLiveData.observe(this,
-            { state ->
-                when (state) {
-                    is State.Success -> {
-                        setupSimilarMoviesUi(state.data)
-                    }
-                    is State.Error -> {
-                        showToast(state.message)
+                { state ->
+                    when (state) {
+                        is State.Success -> {
+                            setupSimilarMoviesUi(state.data)
+                        }
+                        is State.Error -> {
+                            showToast(state.message)
+                        }
                     }
                 }
-            }
         )
 
         if (mViewModel.movieDetailLiveData.value !is State.Success) {
@@ -209,9 +230,58 @@ class MovieDetailActivity : BaseActivity<MovieDetailViewModel, ActivityMovieDeta
                 crossfade(true)
                 transformations(RoundedCornersTransformation(8.0f, 8.0f, 8.0f, 8.0f))
             }
+
+            mViewBinding.shareMovie.setOnClickListener {
+                val share = Intent(Intent.ACTION_SEND)
+                share.type = "text/plain"
+                share.putExtra(Intent.EXTRA_SUBJECT, movieDetail.movieTitle)
+                share.putExtra(Intent.EXTRA_TEXT, movieDetail.movieHomepageLink)
+                startActivity(Intent.createChooser(share, "Share movie!"))
+            }
         }
     }
 
+    /**
+     * Observe network changes i.e. Internet Connectivity
+     */
+    private fun handleNetworkChanges() {
+        NetworkUtils.getNetworkLiveData(applicationContext).observe(
+                this,
+                { isConnected ->
+                    if (!isConnected) {
+                        mViewBinding.textViewNetworkStatus.text =
+                                getString(R.string.text_no_connectivity)
+                        mViewBinding.networkStatusLayout.apply {
+                            show()
+                            setBackgroundColor(getColorRes(R.color.colorStatusNotConnected))
+                        }
+                    } else {
+                        if (mViewModel.movieDetailLiveData.value is State.Error) {
+                            getAllMovieDetailById(movieId!!)
+                        }
+                        mViewBinding.textViewNetworkStatus.text = getString(R.string.text_connectivity)
+                        mViewBinding.networkStatusLayout.apply {
+                            setBackgroundColor(getColorRes(R.color.colorStatusConnected))
+
+                            animate()
+                                    .alpha(1f)
+                                    .setStartDelay(ANIMATION_DURATION)
+                                    .setDuration(ANIMATION_DURATION)
+                                    .setListener(object : AnimatorListenerAdapter() {
+                                        override fun onAnimationEnd(animation: Animator) {
+                                            hide()
+                                        }
+                                    }
+                                    )
+                        }
+                    }
+                }
+        )
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        mViewBinding.swipeRefreshLayout.isRefreshing = isLoading
+    }
 
     private fun convertRuntimeMillis(runtimeMillis: Int): String {
         val h: Int = runtimeMillis / 60

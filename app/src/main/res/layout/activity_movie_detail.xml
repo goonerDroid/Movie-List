@@ -1,227 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	tools:context=".ui.movieDetail.MovieDetailActivity">
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/swipeRefreshLayout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
 
-	<androidx.appcompat.widget.Toolbar
-		android:id="@+id/toolbar"
-		style="@style/Widget.MaterialComponents.Toolbar.Primary"
-		android:theme="@style/MovieDetail_Toolbar"
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
-		android:contentInsetStart="0dp"
-		android:contentInsetLeft="0dp"
-		android:contentInsetEnd="0dp"
-		android:contentInsetRight="0dp"
-		app:contentInsetEnd="0dp"
-		app:contentInsetLeft="0dp"
-		app:contentInsetRight="0dp"
-		app:contentInsetStart="0dp"
-		app:layout_collapseMode="pin"
-		tools:ignore="RtlSymmetry"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/movie_detail_scroll_container">
+		android:layout_height="match_parent"
+		android:animateLayoutChanges="true"
+		tools:context=".ui.movieDetail.MovieDetailActivity">
 
-		<RelativeLayout
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/toolbar"
+			style="@style/Widget.MaterialComponents.Toolbar.Primary"
+			android:theme="@style/MovieDetail_Toolbar"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
+			android:layout_height="?attr/actionBarSize"
+			android:contentInsetStart="0dp"
+			android:contentInsetLeft="0dp"
+			android:contentInsetEnd="0dp"
+			android:contentInsetRight="0dp"
+			app:contentInsetEnd="0dp"
+			app:contentInsetLeft="0dp"
+			app:contentInsetRight="0dp"
+			app:contentInsetStart="0dp"
+			app:layout_collapseMode="pin"
+			tools:ignore="RtlSymmetry"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintBottom_toTopOf="@id/networkStatusLayout">
+
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+
+				<TextView
+					android:id="@+id/toolbar_title"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="18sp"
+					android:layout_centerVertical="true"
+					android:textColor="@color/black"/>
 
 
-			<TextView
-				android:id="@+id/toolbar_title"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="18sp"
-				android:layout_centerVertical="true"
-				android:textColor="@color/black"/>
+				<ImageView
+					android:id="@+id/share_movie"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentEnd="true"
+					android:layout_centerVertical="true"
+					android:layout_marginEnd="@dimen/dimen_16"
+					android:src="@drawable/baseline_share_black_24dp"
+					android:contentDescription="@string/text_movie_share" />
 
-
-		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentEnd="true"
-			android:layout_centerVertical="true"
-			android:layout_marginEnd="@dimen/dimen_16"
-			android:src="@drawable/baseline_share_black_24dp"
-			android:contentDescription="@string/text_movie_share" />
-
-		</RelativeLayout>
-	</androidx.appcompat.widget.Toolbar>
-
-	<androidx.core.widget.NestedScrollView
-		android:id="@+id/movie_detail_scroll_container"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/toolbar">
+			</RelativeLayout>
+		</androidx.appcompat.widget.Toolbar>
 
 		<LinearLayout
+			android:id="@+id/networkStatusLayout"
+			style="@style/StatusView"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical"
-			android:layout_margin="@dimen/dimen_16">
+			android:layout_height="42dp"
+			android:background="@color/colorStatusNotConnected"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-			<FrameLayout
+			<TextView
+				android:id="@+id/textViewNetworkStatus"
+				style="@style/StatusTextView"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				tools:text="@string/text_no_connectivity" />
+		</LinearLayout>
+
+		<androidx.core.widget.NestedScrollView
+			android:id="@+id/movie_detail_scroll_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/networkStatusLayout">
+
+			<LinearLayout
 				android:layout_width="match_parent"
-				android:layout_height="310dp">
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				android:layout_margin="@dimen/dimen_16">
 
-
-				<ImageView
-					android:id="@+id/movie_backdrop"
-					style="@style/MovieDetailPosterImage"
+				<FrameLayout
 					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:contentDescription="@string/text_movie_backdrop"
-					tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+					android:layout_height="310dp">
 
-				<ImageView
-					android:id="@+id/movie_poster"
-					android:layout_width="110dp"
-					android:layout_height="110dp"
-					android:layout_gravity="bottom"
-					android:scaleType="centerCrop"
-					android:layout_marginStart="@dimen/dimen_16"
-					android:layout_marginBottom="@dimen/dimen_16"
-					android:contentDescription="@string/text_movie_poster"
-					tools:srcCompat="@tools:sample/avatars"/>
 
-				<View
+					<ImageView
+						android:id="@+id/movie_backdrop"
+						style="@style/MovieDetailPosterImage"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:contentDescription="@string/text_movie_backdrop"
+						tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+
+					<ImageView
+						android:id="@+id/movie_poster"
+						android:layout_width="110dp"
+						android:layout_height="110dp"
+						android:layout_gravity="bottom"
+						android:scaleType="centerCrop"
+						android:layout_marginStart="@dimen/dimen_16"
+						android:layout_marginBottom="@dimen/dimen_16"
+						android:contentDescription="@string/text_movie_poster"
+						tools:srcCompat="@tools:sample/avatars"/>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:background="@drawable/movie_bg_gradient"/>
+
+				</FrameLayout>
+
+				<TextView
+					android:id="@+id/movie_subTitle"
 					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:background="@drawable/movie_bg_gradient"/>
+					android:layout_height="wrap_content"
+					android:textSize="14sp"
+					android:layout_marginTop="@dimen/dimen_8"
+					android:textColor="@color/text_primary"/>
 
-			</FrameLayout>
-
-			<TextView
-				android:id="@+id/movie_subTitle"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textSize="14sp"
-				android:layout_marginTop="@dimen/dimen_8"
-				android:textColor="@color/text_primary"/>
-
-			<TextView
-				android:id="@+id/movie_genre"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="12sp"
-				android:layout_marginTop="@dimen/dimen_4"
-				android:textColor="@color/text_primary"/>
+				<TextView
+					android:id="@+id/movie_genre"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="12sp"
+					android:layout_marginTop="@dimen/dimen_4"
+					android:textColor="@color/text_primary"/>
 
 
-			<cn.carbs.android.expandabletextview.library.ExpandableTextView
-				android:id="@+id/movie_description"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:textSize="16sp"
-				android:layout_marginTop="@dimen/dimen_8"
-				android:textColor="@color/text_primary"
-				android:lineSpacingExtra="2dp"
-				app:etv_MaxLinesOnShrink="3"
-				app:etv_ToExpandHintColor="@color/purple_700"
-				app:etv_ToShrinkHintColor="@color/purple_700"
-				app:etv_ToExpandHint="..more"
-				app:etv_ToShrinkHint="..less"/>
+				<cn.carbs.android.expandabletextview.library.ExpandableTextView
+					android:id="@+id/movie_description"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textSize="16sp"
+					android:layout_marginTop="@dimen/dimen_8"
+					android:textColor="@color/text_primary"
+					android:lineSpacingExtra="2dp"
+					app:etv_MaxLinesOnShrink="3"
+					app:etv_ToExpandHintColor="@color/purple_700"
+					app:etv_ToShrinkHintColor="@color/purple_700"
+					app:etv_ToExpandHint="..more"
+					app:etv_ToShrinkHint="..less"/>
 
-			<View style="@style/Divider.Horizontal"
-				android:layout_marginTop="@dimen/dimen_16"
-				android:layout_marginBottom="8dp"/>
+				<View style="@style/Divider.Horizontal"
+					android:layout_marginTop="@dimen/dimen_16"
+					android:layout_marginBottom="8dp"/>
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/cast_txt"
-				android:textSize="16sp"
-				android:layout_marginTop="@dimen/dimen_8"
-				android:layout_marginBottom="@dimen/dimen_4"
-				android:textColor="@color/text_primary"/>
-
-			<androidx.recyclerview.widget.RecyclerView
-				android:id="@+id/movie_cast_recyclerview"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
-
-			<View style="@style/Divider.Horizontal"
-				android:layout_marginTop="@dimen/dimen_16"
-				android:layout_marginBottom="8dp"/>
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/crew_txt"
-				android:textSize="16sp"
-				android:layout_marginTop="@dimen/dimen_8"
-				android:layout_marginBottom="@dimen/dimen_4"
-				android:textColor="@color/text_primary"/>
-
-			<androidx.recyclerview.widget.RecyclerView
-				android:id="@+id/movie_crew_recyclerview"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
-
-			<View style="@style/Divider.Horizontal"
-				android:layout_marginTop="@dimen/dimen_16"
-				android:layout_marginBottom="8dp"/>
-
-			<TextView
-				android:id="@+id/reviews_count_txt"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/reviews_txt"
-				android:textSize="16sp"
-				android:layout_marginTop="@dimen/dimen_8"
-				android:layout_marginBottom="@dimen/dimen_4"
-				android:textColor="@color/text_primary"/>
-
-			<FrameLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/dimen_4">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/cast_txt"
+					android:textSize="16sp"
+					android:textStyle="bold"
+					android:layout_marginTop="@dimen/dimen_8"
+					android:layout_marginBottom="@dimen/dimen_4"
+					android:textColor="@color/text_primary"/>
 
 				<androidx.recyclerview.widget.RecyclerView
-					android:id="@+id/movie_reviews_recyclerview"
+					android:id="@+id/movie_cast_recyclerview"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"/>
 
+				<View style="@style/Divider.Horizontal"
+					android:layout_marginTop="@dimen/dimen_16"
+					android:layout_marginBottom="8dp"/>
+
 				<TextView
-					android:id="@+id/no_reviews_txt"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@string/no_review_txt"
-					android:textSize="14sp"
+					android:text="@string/crew_txt"
+					android:textStyle="bold"
+					android:textSize="16sp"
+					android:layout_marginTop="@dimen/dimen_8"
+					android:layout_marginBottom="@dimen/dimen_4"
 					android:textColor="@color/text_primary"/>
-			</FrameLayout>
 
-			<View style="@style/Divider.Horizontal"
-				android:layout_marginTop="@dimen/dimen_16"
-				android:layout_marginBottom="8dp"/>
+				<androidx.recyclerview.widget.RecyclerView
+					android:id="@+id/movie_crew_recyclerview"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"/>
+
+				<View style="@style/Divider.Horizontal"
+					android:layout_marginTop="@dimen/dimen_16"
+					android:layout_marginBottom="8dp"/>
+
+				<TextView
+					android:id="@+id/reviews_count_txt"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/reviews_txt"
+					android:textStyle="bold"
+					android:textSize="16sp"
+					android:layout_marginTop="@dimen/dimen_8"
+					android:layout_marginBottom="@dimen/dimen_4"
+					android:textColor="@color/text_primary"/>
+
+				<FrameLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="@dimen/dimen_4">
+
+					<androidx.recyclerview.widget.RecyclerView
+						android:id="@+id/movie_reviews_recyclerview"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"/>
+
+					<TextView
+						android:id="@+id/no_reviews_txt"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/no_review_txt"
+						android:textSize="14sp"
+						android:textColor="@color/text_primary"/>
+				</FrameLayout>
+
+				<View style="@style/Divider.Horizontal"
+					android:layout_marginTop="@dimen/dimen_16"
+					android:layout_marginBottom="8dp"/>
 
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/similar_movies_txt"
-				android:textSize="16sp"
-				android:layout_marginTop="@dimen/dimen_8"
-				android:layout_marginBottom="@dimen/dimen_4"
-				android:textColor="@color/text_primary"/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/similar_movies_txt"
+					android:textSize="16sp"
+					android:textStyle="bold"
+					android:layout_marginTop="@dimen/dimen_8"
+					android:layout_marginBottom="@dimen/dimen_4"
+					android:textColor="@color/text_primary"/>
 
 
-			<androidx.recyclerview.widget.RecyclerView
-				android:id="@+id/similar_movies_recyclerview"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/dimen_4"
-				android:layout_marginBottom="?actionBarSize"/>
+				<androidx.recyclerview.widget.RecyclerView
+					android:id="@+id/similar_movies_recyclerview"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="@dimen/dimen_4"
+					android:layout_marginBottom="?actionBarSize"/>
 
-		</LinearLayout>
+			</LinearLayout>
 
-	</androidx.core.widget.NestedScrollView>
+		</androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

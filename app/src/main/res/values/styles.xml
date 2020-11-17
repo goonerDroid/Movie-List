@@ -22,7 +22,6 @@
     <style name="NowPlayingMoviesRecyclerStyle">
         <item name="android:scrollbars">vertical</item>
         <item name="android:paddingTop">@dimen/dimen_4</item>
-        <item name="android:paddingBottom">@dimen/dimen_8</item>
     </style>
 
     <style name="NowPlayingMovieTitleText">
@@ -77,8 +76,8 @@
 
     <style name="ThemeOverlay.SearchView" parent="">
         <!-- Text color -->
-        <item name="android:editTextColor">@color/black</item>
+        <item name="android:editTextColor">@color/text_primary</item>
         <!-- Hint text color -->
-        <item name="android:textColorHint">@color/black</item>
+        <item name="android:textColorHint">@color/text_secondary</item>
     </style>
 </resources>
