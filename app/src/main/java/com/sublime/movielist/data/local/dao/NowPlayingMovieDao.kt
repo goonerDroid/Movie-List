@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.sublime.movielist.model.NowPlayingMovie
+import com.sublime.movielist.model.Movie
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -14,27 +14,27 @@ import kotlinx.coroutines.flow.Flow
 interface NowPlayingMovieDao {
 
     /**
-     * Inserts [nowPlayingMovie] into the [NowPlayingMovie.TABLE_NAME] table.
+     * Inserts [movie] into the [Movie.TABLE_NAME] table.
      * Duplicate values are replaced in the table.
-     * @param nowPlayingMovie List<NowPlayingMovie>
+     * @param movie List<NowPlayingMovie>
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNowPlayingMovies(nowPlayingMovie: List<NowPlayingMovie>)
+    fun insertNowPlayingMovies(movie: List<Movie>)
 
     /**
-     * Deletes all now playing movies from the [NowPlayingMovie.TABLE_NAME] table.
+     * Deletes all now playing movies from the [Movie.TABLE_NAME] table.
      */
-    @Query("DELETE FROM ${NowPlayingMovie.TABLE_NAME}")
+    @Query("DELETE FROM ${Movie.TABLE_NAME}")
     fun deleteAllNowPlayingMovies()
 
     /**
-     * Fetches all now playing movies from the [NowPlayingMovie.TABLE_NAME] table.
+     * Fetches all now playing movies from the [Movie.TABLE_NAME] table.
      * @return [Flow]
      */
-    @Query("SELECT * FROM ${NowPlayingMovie.TABLE_NAME}")
-    fun getAllNowPlayingMovies(): Flow<List<NowPlayingMovie>>
+    @Query("SELECT * FROM ${Movie.TABLE_NAME}")
+    fun getAllNowPlayingMovies(): Flow<List<Movie>>
 
 
-    @Query("SELECT * FROM ${NowPlayingMovie.TABLE_NAME} WHERE movieTitle LIKE '%' || :search || '%'")
-    fun getSearchedMovies(search: String?): Flow<List<NowPlayingMovie>>
+    @Query("SELECT * FROM ${Movie.TABLE_NAME} WHERE movieTitle LIKE '%' || :search || '%'")
+    fun getSearchedMovies(search: String?): Flow<List<Movie>>
 }

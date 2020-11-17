@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 @Keep
-data class NowPlayingMovieResponse(
+data class SimilarMoviesResponse (
     @SerializedName("results")
-    val results: ArrayList<Movie> = ArrayList()
+    val results: ArrayList<SimilarMovie> = ArrayList()
 )

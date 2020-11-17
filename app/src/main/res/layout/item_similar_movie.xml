@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:layout_margin="@dimen/dimen_8"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:id="@+id/poster_container"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/movie_backdrop"
+            style="@style/MovieDetailPosterImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/similar_movies_txt"
+            tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+
+        <ImageView
+            android:id="@+id/movie_poster"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="bottom"
+            android:scaleType="centerCrop"
+            android:layout_marginStart="@dimen/dimen_16"
+            android:layout_marginBottom="@dimen/dimen_16"
+            android:contentDescription="@string/text_movie_poster"
+            tools:srcCompat="@tools:sample/avatars"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/movie_bg_gradient"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/similar_movie_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_8"
+        android:layout_marginEnd="@dimen/dimen_8"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:textSize="16sp"
+        android:textColor="@color/text_primary"
+        app:layout_constraintTop_toBottomOf="@id/poster_container"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@tools:sample/lorem" />
+
+
+    <TextView
+        android:id="@+id/similar_movie_release"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_8"
+        android:layout_marginEnd="@dimen/dimen_8"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/similar_movie_title"
+        tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/similar_likes_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_8"
+        android:layout_marginEnd="@dimen/dimen_8"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:drawablePadding="@dimen/dimen_4"
+        app:drawableStartCompat="@drawable/baseline_thumb_up_alt_green_a400_18dp"
+        app:layout_constraintStart_toEndOf="@id/similar_movie_release"
+        app:layout_constraintTop_toBottomOf="@+id/similar_movie_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,9 @@
 package com.sublime.movielist.ui.movieList
 
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sublime.movielist.data.repository.MoviesRepository
-import com.sublime.movielist.model.NowPlayingMovie
+import com.sublime.movielist.model.Movie
 import com.sublime.movielist.model.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -23,9 +22,9 @@ import kotlinx.coroutines.launch
 class MovieListViewModel @ViewModelInject constructor(private val moviesRepository: MoviesRepository) :
     ViewModel() {
 
-    private val _nowPlayingMoviesLiveData = MutableLiveData<State<List<NowPlayingMovie>>>()
+    private val _nowPlayingMoviesLiveData = MutableLiveData<State<List<Movie>>>()
 
-    val nowPlayingMoviesLiveData: LiveData<State<List<NowPlayingMovie>>>
+    val moviesLiveData: LiveData<State<List<Movie>>>
         get() = _nowPlayingMoviesLiveData
 
 
@@ -33,7 +32,7 @@ class MovieListViewModel @ViewModelInject constructor(private val moviesReposito
 
     val searchedMovieLiveData = searchChanel.asFlow()
             .flatMapLatest { search ->
-                moviesRepository.getSearchedDogs(search)
+                moviesRepository.getSearchedMovie(search)
             }
             .catch { throwable ->
                 //Log exception here

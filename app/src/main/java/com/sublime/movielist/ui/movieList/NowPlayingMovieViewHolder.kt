@@ -11,7 +11,7 @@ import coil.transform.RoundedCornersTransformation
 import com.sublime.movielist.R
 import com.sublime.movielist.data.remote.MovieService
 import com.sublime.movielist.databinding.ItemNowPlayingBinding
-import com.sublime.movielist.model.NowPlayingMovie
+import com.sublime.movielist.model.Movie
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,11 +21,11 @@ class NowPlayingMovieViewHolder (private val binding: ItemNowPlayingBinding) : R
 
 
     @SuppressLint("SetTextI18n")
-    fun bind(nowPlayingMovie: NowPlayingMovie, onItemClicked: (NowPlayingMovie, ImageView) -> Unit) {
-        binding.movieTitle.text = nowPlayingMovie.movieTitle
-        val formattedDate = customDateFormat.format(originalDateFormat.parse(nowPlayingMovie.movieReleaseDate))
+    fun bind(movie: Movie, onItemClicked: (Movie, ImageView) -> Unit) {
+        binding.movieTitle.text = movie.movieTitle
+        val formattedDate = customDateFormat.format(originalDateFormat.parse(movie.movieReleaseDate))
         binding.movieRelease.text = formattedDate
-        binding.moviePoster.load(MovieService.IMAGE_BASE_URL + nowPlayingMovie.moviePosterPath) {
+        binding.moviePoster.load(MovieService.IMAGE_BASE_URL + movie.moviePosterPath) {
             placeholder(R.drawable.ic_photo)
             error(R.drawable.ic_broken_image)
             crossfade(true)
@@ -33,13 +33,13 @@ class NowPlayingMovieViewHolder (private val binding: ItemNowPlayingBinding) : R
         }
 
         when{
-            nowPlayingMovie.movieVoteCount != 0 -> binding.likesCount.text = ""+ nowPlayingMovie.movieVoteCount + " likes"
-            nowPlayingMovie.movieVoteCount == 0  -> binding.likesCount.visibility = View.INVISIBLE
+            movie.movieVoteCount != 0 -> binding.likesCount.text = ""+ movie.movieVoteCount + " likes"
+            movie.movieVoteCount == 0  -> binding.likesCount.visibility = View.INVISIBLE
             else -> binding.likesCount.visibility = View.VISIBLE
         }
 
         binding.root.setOnClickListener {
-            onItemClicked(nowPlayingMovie, binding.moviePoster)
+            onItemClicked(movie, binding.moviePoster)
         }
     }
 }

@@ -2,6 +2,7 @@ package com.sublime.movielist.ui.movieList
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -10,9 +11,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sublime.movielist.R
 import com.sublime.movielist.databinding.ActivityMovieListBinding
-import com.sublime.movielist.model.NowPlayingMovie
+import com.sublime.movielist.model.Movie
 import com.sublime.movielist.model.State
 import com.sublime.movielist.ui.base.BaseActivity
+import com.sublime.movielist.ui.movieDetail.MovieDetailActivity
 import com.sublime.movielist.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -58,7 +60,7 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
     }
 
     private fun initNowPlayingMoviesObservers() {
-        mViewModel.nowPlayingMoviesLiveData.observe(
+        mViewModel.moviesLiveData.observe(
                 this,
                 Observer { state ->
                     when (state) {
@@ -82,7 +84,7 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
         }
 
         // If State isn't `Success` then again reload movies.
-        if (mViewModel.nowPlayingMoviesLiveData.value !is State.Success) {
+        if (mViewModel.moviesLiveData.value !is State.Success) {
             getNowPlayingMovies()
         }
 
@@ -106,7 +108,7 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
                             setBackgroundColor(getColorRes(R.color.colorStatusNotConnected))
                         }
                     } else {
-                        if (mViewModel.nowPlayingMoviesLiveData.value is State.Error || mAdapter.itemCount == 0) {
+                        if (mViewModel.moviesLiveData.value is State.Error || mAdapter.itemCount == 0) {
                             getNowPlayingMovies()
                         }
                         mViewBinding.textViewNetworkStatus.text = getString(R.string.text_connectivity)
@@ -137,7 +139,7 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
         mViewBinding.swipeRefreshLayout.isRefreshing = isLoading
     }
 
-    private fun onItemClicked(nowPlayingMovie: NowPlayingMovie, imageView: ImageView) {
+    private fun onItemClicked(movie: Movie, imageView: ImageView) {
 //        val intent = Intent(this, PostDetailsActivity::class.java)
 //        intent.putExtra(PostDetailsActivity.POST_ID, nowPlayingMovie.id)
 //
@@ -147,6 +149,12 @@ class MovieListActivity : BaseActivity<MovieListViewModel, ActivityMovieListBind
 //            imageView.transitionName
 //        )
 //
-//        startActivity(intent, options.toBundle())//TODO
+//        startActivity(intent, options.toBundle())
+
+        startActivity(
+                Intent(this, MovieDetailActivity::class.java).apply {
+                    putExtra("id", movie.movieId)
+                }
+        )
     }
 }

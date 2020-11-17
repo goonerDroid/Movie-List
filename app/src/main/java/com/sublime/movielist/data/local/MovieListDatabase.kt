@@ -5,12 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.sublime.movielist.data.local.dao.MovieDetailDao
-import com.sublime.movielist.data.local.dao.NowPlayingMovieDao
+import com.sublime.movielist.data.local.dao.*
+import com.sublime.movielist.data.typeconverter.MovieCastItemTypeConverter
 import com.sublime.movielist.data.typeconverter.MovieGenreItemTypeConverter
-import com.sublime.movielist.model.Genre
-import com.sublime.movielist.model.MovieDetail
-import com.sublime.movielist.model.NowPlayingMovie
+import com.sublime.movielist.data.typeconverter.MovieReviewItemTypeConverter
+import com.sublime.movielist.model.*
 
 
 /**
@@ -18,10 +17,13 @@ import com.sublime.movielist.model.NowPlayingMovie
  * It provides DAO [NowPlayingMovieDao] by using method [getNowPlayingMovieDao].
  */
 @Database(
-    entities = [NowPlayingMovie::class, MovieDetail::class,Genre::class],
+    entities = [Movie::class, MovieDetail::class,Genre::class, MovieCreditsResponse::class, MovieCast::class,
+    MovieReviewsResponse::class,SimilarMovie::class],
     version = DatabaseMigrations.DB_VERSION
 )
-@TypeConverters(MovieGenreItemTypeConverter::class)
+@TypeConverters(MovieGenreItemTypeConverter::class,MovieCastItemTypeConverter::class,
+    MovieReviewItemTypeConverter::class
+)
 abstract class MovieListDatabase : RoomDatabase() {
 
     companion object {
@@ -58,6 +60,21 @@ abstract class MovieListDatabase : RoomDatabase() {
      * @return [MovieDetailDao] Movie Detail Data Access Object.
      */
     abstract fun getMovieDetailDao(): MovieDetailDao
+
+    /**
+     * @return [MovieCreditsDao] Movie Detail Data Access Object.
+     */
+    abstract fun getMovieCreditsDao(): MovieCreditsDao
+
+    /**
+     * @return [MovieReviewsDao] Movie Detail Data Access Object.
+     */
+    abstract fun getMovieReviewsDao(): MovieReviewsDao
+
+    /**
+     * @return [SimilarMovieDao] Movie Detail Data Access Object.
+     */
+    abstract fun getSimilarMoviesDao(): SimilarMovieDao
 
 
 }

@@ -6,11 +6,11 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.sublime.movielist.databinding.ItemNowPlayingBinding
-import com.sublime.movielist.model.NowPlayingMovie
+import com.sublime.movielist.model.Movie
 
 class MovieListAdapter(
-    private val onItemClicked: (NowPlayingMovie, ImageView) -> Unit
-) : ListAdapter<NowPlayingMovie,NowPlayingMovieViewHolder>(NowPlayingMovieListDiff()) {
+    private val onItemClicked: (Movie, ImageView) -> Unit
+) : ListAdapter<Movie,NowPlayingMovieViewHolder>(NowPlayingMovieListDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)= NowPlayingMovieViewHolder (
         ItemNowPlayingBinding.inflate(
@@ -24,13 +24,13 @@ class MovieListAdapter(
         holder.bind(getItem(position), onItemClicked)
     }
 
-    private class NowPlayingMovieListDiff : DiffUtil.ItemCallback<NowPlayingMovie>() {
+    private class NowPlayingMovieListDiff : DiffUtil.ItemCallback<Movie>() {
 
-        override fun areItemsTheSame(oldItem: NowPlayingMovie, newItem: NowPlayingMovie): Boolean {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.movieId == newItem.movieId
         }
 
-        override fun areContentsTheSame(oldItem: NowPlayingMovie, newItem: NowPlayingMovie): Boolean {
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem == newItem
         }
     }

@@ -23,5 +23,19 @@ class MovieListDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideMovieDetailDaoDao(database: MovieListDatabase) = database.getMovieDetailDao()
+    fun provideMovieDetailDao(database: MovieListDatabase) = database.getMovieDetailDao()
+
+
+    @Singleton
+    @Provides
+    fun provideMovieCreditsDao(database: MovieListDatabase) = database.getMovieCreditsDao()
+
+
+    @Singleton
+    @Provides
+    fun provideMovieReviewsDao(database: MovieListDatabase) = database.getMovieReviewsDao()
+
+    @Singleton
+    @Provides
+    fun provideSimilarMoviesDao(database: MovieListDatabase) = database.getSimilarMoviesDao()
 }

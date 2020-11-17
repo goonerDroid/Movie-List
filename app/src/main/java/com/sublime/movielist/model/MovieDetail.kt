@@ -29,7 +29,7 @@ data class MovieDetail (
     @SerializedName("overview") var movieOverview: String,
     @SerializedName("poster_path") var moviePosterImg: String,
     @SerializedName("release_date") var movieReleaseDate: String,
-    @SerializedName("runtime") var movieRuntime: String,
+    @SerializedName("runtime") var movieRuntime: Int,
     @SerializedName("vote_count") var movieVoteCount: Int,
 
     ): Parcelable {

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface MovieDetailDao {
+
     /**
      * Inserts [movieDetail] into the [MovieDetail.TABLE_NAME] table.
      * Duplicate values are replaced in the table.
@@ -30,6 +31,6 @@ interface MovieDetailDao {
      * Fetches all now playing movies from the [MovieDetail.TABLE_NAME] table.
      * @return [Flow]
      */
-    @Query("SELECT * FROM ${MovieDetail.TABLE_NAME}")
-    fun getMovieDetail(): Flow<MovieDetail>
+    @Query("SELECT * FROM ${MovieDetail.TABLE_NAME} WHERE movieId = :movieId")
+    fun getMovieDetail(movieId: Int): Flow<MovieDetail>
 }

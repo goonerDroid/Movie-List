@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border"
+    android:layout_marginStart="@dimen/dimen_4"
+    android:layout_marginEnd="@dimen/dimen_4"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/user_img"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/dimen_16"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:src="@drawable/outline_tag_faces_black_24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/review_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_8"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:textSize="16sp"
+        android:textColor="@color/text_primary"
+        app:layout_constraintStart_toEndOf="@id/user_img"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <cn.carbs.android.expandabletextview.library.ExpandableTextView
+        android:id="@+id/review_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen_8"
+        android:paddingBottom="@dimen/dimen_8"
+        android:textSize="12sp"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/text_primary"
+        app:etv_MaxLinesOnShrink="10"
+        app:etv_ToExpandHintColor="@color/purple_700"
+        app:etv_ToShrinkHintColor="@color/purple_700"
+        app:etv_ToExpandHint="..more"
+        app:etv_ToShrinkHint="..less"
+        app:etv_EnableToggle="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_img"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

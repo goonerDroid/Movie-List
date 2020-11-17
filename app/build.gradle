@@ -94,8 +94,7 @@ dependencies {
 	kapt "com.google.dagger:hilt-android-compiler:$versions.daggerHiltAndroidVersion"
 	kapt "androidx.hilt:hilt-compiler:$versions.daggerHiltVersion"
 
-	implementation "com.github.skydoves:transformationlayout:1.0.6"
-
+	implementation 'cn.carbs.android:ExpandableTextView:1.0.3'
 
 	testImplementation 'junit:junit:4.+'
 	androidTestImplementation 'androidx.test.ext:junit:1.1.2'

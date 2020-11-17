@@ -3,6 +3,15 @@
 
     <string name="text_no_connectivity">No Internet Connection Available</string>
     <string name="text_movie_poster">Movie Poster</string>
+    <string name="text_movie_backdrop">Movie Backdrop</string>
     <string name="text_connectivity">Back Online</string>
     <string name="book_tickets">Book Ticket</string>
+	<string name="text_movie_share">Share movie</string>
+    <string name="bullet_symbol">•</string>
+    <string name="movie_crew_poster">Movie crew poster</string>
+    <string name="cast_txt">Cast</string>
+    <string name="crew_txt">Crew</string>
+    <string name="reviews_txt">Reviews</string>
+    <string name="no_review_txt"><![CDATA[Watched? Add your rating & review]]></string>
+    <string name="similar_movies_txt">Similar movies</string>
 </resources>

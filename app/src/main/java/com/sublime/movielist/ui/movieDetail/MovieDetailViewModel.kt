@@ -4,8 +4,7 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sublime.movielist.data.repository.MoviesRepository
-import com.sublime.movielist.model.MovieDetail
-import com.sublime.movielist.model.State
+import com.sublime.movielist.model.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -18,21 +17,59 @@ class MovieDetailViewModel  @ViewModelInject constructor(private val moviesRepos
                                                          @Assisted private val savedStateHandle: SavedStateHandle) :
         ViewModel() {
 
-    private val _showDetailLiveData = MutableLiveData<State<MovieDetail>>()
+    private val _movieDetailLiveData = MutableLiveData<State<MovieDetail>>()
+    val movieDetailLiveData: LiveData<State<MovieDetail>>
+        get() = _movieDetailLiveData
 
-    val showDetailLiveData: LiveData<State<MovieDetail>>
-        get() = _showDetailLiveData
+
+    private val _movieCreditsLiveData = MutableLiveData<State<MovieCreditsResponse>>()
+    val movieCreditsLiveData: LiveData<State<MovieCreditsResponse>>
+        get() = _movieCreditsLiveData
+
+    private val _movieReviewsLiveData = MutableLiveData<State<MovieReviewsResponse>>()
+    val movieReviewsLiveData: LiveData<State<MovieReviewsResponse>>
+        get() = _movieReviewsLiveData
+
+    private val _similarMoviesLiveData = MutableLiveData<State<List<SimilarMovie>>>()
+    val similarMoviesLiveData: LiveData<State<List<SimilarMovie>>>
+        get() = _similarMoviesLiveData
 
     private val movieIdIntentLiveData
             = savedStateHandle.getLiveData<Int>("id")
-
     val movieIdDataNotifier: LiveData<Int>
         get() = movieIdIntentLiveData
+
+
 
     fun getShowDetailFromId(showId: Int){
         viewModelScope.launch {
             moviesRepository.getMovieDetail(showId).collect {
-                _showDetailLiveData.value = it
+                _movieDetailLiveData.value = it
+            }
+        }
+    }
+
+    fun getMovieCreditsFromId(showId: Int){
+        viewModelScope.launch {
+            moviesRepository.getMovieCredits(showId).collect {
+                _movieCreditsLiveData.value = it
+            }
+        }
+    }
+
+    fun getMovieReviewsFromId(showId: Int){
+        viewModelScope.launch {
+            moviesRepository.getMovieReviews(showId).collect {
+                _movieReviewsLiveData.value = it
+            }
+        }
+    }
+
+
+    fun getSimilarMoviesFromId(showId: Int){
+        viewModelScope.launch {
+            moviesRepository.getSimilarMoviesById(showId).collect {
+                _similarMoviesLiveData.value = it
             }
         }
     }
